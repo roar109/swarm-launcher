@@ -25,7 +25,8 @@ public class JsonAppFileImpl implements AppFile {
 		try {
 			obj = parser.parse(new FileReader(fileName));
 		} catch (Exception e) {
-			throw new RuntimeException("Error when try to parse json property file");
+			e.printStackTrace();
+			throw new RuntimeException("Error when try to parse json property file: "+e.getMessage());
 		}
 		return (Map<Object, Object>) obj;
 	}
