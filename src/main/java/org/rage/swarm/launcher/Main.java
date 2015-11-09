@@ -1,15 +1,10 @@
 package org.rage.swarm.launcher;
 
-import java.io.FileReader;
-
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.rage.swarm.configuration.ApplicationConfiguration;
+import org.rage.swarm.configuration.JsonAppFileImpl;
 import org.wildfly.swarm.container.Container;
-import org.wildfly.swarm.ejb.EJBFraction;
 import org.wildfly.swarm.jaxrs.JAXRSArchive;
-import org.wildfly.swarm.weld.WeldFraction;
 
 /**
  * @author hector.mendoza
@@ -17,37 +12,24 @@ import org.wildfly.swarm.weld.WeldFraction;
  */
 public class Main {
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Main class called by the swarm plug in, it reads the needed configuration
+	 * from the passes json file.
+	 * 
+	 * Takes by default a JAXWS app, with ejb, logger and datasources enabled.
+	 * 
+	 */
 	public static void main(String[] args) {
-		JSONParser parser = new JSONParser();
-		Object obj;
+		System.out.println("<<<<<<Main>>>>>>");
 		try {
-			System.out.println("<<<<<<Main>>>>>>");
-			
-			Container container = new Container();
-	        container.start();
-	        
-	        //Add Fractions
-			container.fraction(EJBFraction.createDefaultFraction());
-			container.fraction(new WeldFraction());
-	        
-			obj = parser.parse(new FileReader(args[0]));
-			final JSONObject jsonObject = (JSONObject) obj;
-			
-			final ApplicationConfiguration applicationConfig = new ApplicationConfiguration(jsonObject);
-			applicationConfig.configureProperties();
-			
-			final JAXRSArchive deployment = ShrinkWrap.create(JAXRSArchive.class);
-			
-			// Configure deployment archive
-			applicationConfig.setupContainer(deployment);
-			
-			container.deploy(deployment);
-			
+			final Container container = new Container();
+			container.start();
+			new ApplicationConfiguration(container, ShrinkWrap.create(JAXRSArchive.class), new JsonAppFileImpl(args[0]))
+					.setupContainerAndDeployApp();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
-		} 
+		}
 	}
 
 }

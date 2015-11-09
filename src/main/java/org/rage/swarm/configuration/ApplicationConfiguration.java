@@ -7,29 +7,35 @@ import org.jboss.shrinkwrap.api.asset.ClassLoaderAsset;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.rage.swarm.utils.Constants;
+import org.wildfly.swarm.container.Container;
 import org.wildfly.swarm.jaxrs.JAXRSArchive;
 
 /**
  * @author hector.mendoza
  *
- * @TODO validate values from json
  */
 public class ApplicationConfiguration {
 
 	private final Map<Object, Object> configuration;
+	private Container weldContainer;
+	private JAXRSArchive archive;
 
-	public ApplicationConfiguration(final Map<Object, Object> configuration) {
-		this.configuration = configuration;
+	public ApplicationConfiguration(final Container container, final JAXRSArchive archive, final AppFile appFileHandler) {
+		this.weldContainer = container;
+		this.archive = archive;
+		this.configuration = appFileHandler.readFileFromParameter();
 	}
 
-	public void setupContainer(final JAXRSArchive deployment) {
-		try {
-			addPackage(deployment);
-			addResources(deployment);
-			deployment.addAllDependencies();
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
+	public void setupContainerAndDeployApp() throws Exception {
+		configureProperties();
+		
+		if(archive != null){
+			addPackage();
+			addResources();
+			archive.addAllDependencies();
 		}
+		
+		weldContainer.deploy(archive);
 	}
 
 	public void configureDatasources() {
@@ -50,26 +56,26 @@ public class ApplicationConfiguration {
 			}
 		}
 	}
+	
+	public void addPackage() {
+		if (configuration.containsKey(Constants.PACKAGE_PROPERTY)) {
+			archive.addPackages(Boolean.TRUE, String.valueOf(configuration.get(Constants.PACKAGE_PROPERTY)));
+		}
+	}
 
 	@SuppressWarnings("rawtypes")
-	public void addResources(final JAXRSArchive deployment) {
+	public void addResources() {
 		if (configuration.containsKey(Constants.RESOURCES_PROPERTY)) {
 			final JSONArray resources = (JSONArray) configuration.get(Constants.RESOURCES_PROPERTY);
 			final Iterator it = resources.iterator();
 
 			while (it.hasNext()) {
 				final JSONObject resource = (JSONObject) it.next();
-				deployment.addAsWebInfResource(
+				archive.addAsWebInfResource(
 						new ClassLoaderAsset(String.valueOf(resource.get(Constants.RESOURCE_NAME_PROPERTY)),
 								this.getClass().getClassLoader()),
 						String.valueOf(resource.get(Constants.RESOURCE_TARGET_PATH_PROPERTY)));
 			}
-		}
-	}
-
-	public void addPackage(final JAXRSArchive deployment) {
-		if (configuration.containsKey(Constants.PACKAGE_PROPERTY)) {
-			deployment.addPackages(Boolean.TRUE, String.valueOf(configuration.get(Constants.PACKAGE_PROPERTY)));
 		}
 	}
 

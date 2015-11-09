@@ -10,7 +10,7 @@ import org.wildfly.swarm.container.JBossDeploymentStructureContainer;
 import org.wildfly.swarm.undertow.JBossWebContainer;
 import org.wildfly.swarm.undertow.StaticContentContainer;
 
-//TODO in progres...
+//TODO in progress...
 public interface AppArchive extends Archive<AppArchive>, LibraryContainer<AppArchive>, WebContainer<AppArchive>,
 		ResourceContainer<AppArchive>, ServiceProviderContainer<AppArchive>,
 		JBossDeploymentStructureContainer<AppArchive>, JBossWebContainer<AppArchive>,
