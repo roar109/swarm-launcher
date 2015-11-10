@@ -1,4 +1,4 @@
-package org.rage.swarm.utils;
+package org.rage.zeppelin.utils;
 
 public class Constants {
 

@@ -1,4 +1,4 @@
-package org.rage.swarm.validation;
+package org.rage.zeppelin.validation;
 
 public class ConfigJsonValidator {
 

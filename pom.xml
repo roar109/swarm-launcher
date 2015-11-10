@@ -3,11 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.rage</groupId>
-	<artifactId>swarm-launcher</artifactId>
+	<artifactId>zeppelin</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>swarm-launcher</name>
+	<name>Zeppelin</name>
+	<url>https://github.com/roar109/swarm-launcher</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,4 +1,4 @@
-package org.rage.swarm.configuration;
+package org.rage.zeppelin.configuration;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -6,11 +6,15 @@ import java.util.Map;
 import org.jboss.shrinkwrap.api.asset.ClassLoaderAsset;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.rage.swarm.utils.Constants;
+import org.rage.zeppelin.configuration.reader.AppFile;
+import org.rage.zeppelin.utils.Constants;
 import org.wildfly.swarm.container.Container;
 import org.wildfly.swarm.jaxrs.JAXRSArchive;
 
 /**
+ * Read the configuration file and configure the Swarm container with the found
+ * configuration.
+ * 
  * @author hector.mendoza
  *
  */
@@ -20,24 +24,36 @@ public class ApplicationConfiguration {
 	private Container weldContainer;
 	private JAXRSArchive archive;
 
-	public ApplicationConfiguration(final Container container, final JAXRSArchive archive, final AppFile appFileHandler) {
+	/**
+	 * @param container
+	 * @param archive
+	 * @param appFileHandler
+	 */
+	public ApplicationConfiguration(final Container container, final JAXRSArchive archive,
+			final AppFile appFileHandler) {
 		this.weldContainer = container;
 		this.archive = archive;
 		this.configuration = appFileHandler.readFileFromParameter();
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public void setupContainerAndDeployApp() throws Exception {
 		configureProperties();
-		
-		if(archive != null){
+
+		if (archive != null) {
 			addPackage();
 			addResources();
 			archive.addAllDependencies();
 		}
-		
+
 		weldContainer.deploy(archive);
 	}
 
+	/**
+	 * Configure available data sources
+	 */
 	public void configureDatasources() {
 		if (configuration.containsKey("datasources")) {
 			final JSONObject datasources = (JSONObject) configuration.get("datasources");
@@ -45,6 +61,9 @@ public class ApplicationConfiguration {
 		}
 	}
 
+	/**
+	 * Register properties from the config file as system properties
+	 */
 	@SuppressWarnings("unchecked")
 	public void configureProperties() {
 		if (configuration.containsKey(Constants.SYSTEM_PROPERTIES)) {
@@ -56,13 +75,19 @@ public class ApplicationConfiguration {
 			}
 		}
 	}
-	
+
+	/**
+	 * Add packages to the archive
+	 */
 	public void addPackage() {
 		if (configuration.containsKey(Constants.PACKAGE_PROPERTY)) {
 			archive.addPackages(Boolean.TRUE, String.valueOf(configuration.get(Constants.PACKAGE_PROPERTY)));
 		}
 	}
 
+	/**
+	 * Add additional files as resources
+	 */
 	@SuppressWarnings("rawtypes")
 	public void addResources() {
 		if (configuration.containsKey(Constants.RESOURCES_PROPERTY)) {
@@ -79,6 +104,10 @@ public class ApplicationConfiguration {
 		}
 	}
 
+	/**
+	 * @param key
+	 * @param properties
+	 */
 	public void ifKeyExistAddItAsSystemProperty(final Object key, final Map<Object, Object> properties) {
 		if (properties.containsKey(key)) {
 			System.setProperty(String.valueOf(key), String.valueOf(properties.get(key)));

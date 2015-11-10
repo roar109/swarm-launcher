@@ -1,4 +1,4 @@
-package org.rage.swarm.archive;
+package org.rage.zeppelin.archive;
 
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.container.LibraryContainer;

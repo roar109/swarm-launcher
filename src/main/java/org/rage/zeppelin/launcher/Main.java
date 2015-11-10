@@ -1,8 +1,8 @@
-package org.rage.swarm.launcher;
+package org.rage.zeppelin.launcher;
 
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.rage.swarm.configuration.ApplicationConfiguration;
-import org.rage.swarm.configuration.JsonAppFileImpl;
+import org.rage.zeppelin.configuration.ApplicationConfiguration;
+import org.rage.zeppelin.configuration.reader.JsonAppFileImpl;
 import org.wildfly.swarm.container.Container;
 import org.wildfly.swarm.jaxrs.JAXRSArchive;
 
