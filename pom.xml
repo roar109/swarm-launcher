@@ -8,7 +8,7 @@
 	<packaging>jar</packaging>
 
 	<name>Zeppelin</name>
-	<url>https://github.com/roar109/swarm-launcher</url>
+	<url>https://github.com/roar109/zeppelin</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
