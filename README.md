@@ -33,3 +33,6 @@ Example of configuration in your app:
 Run it like
 
     java -jar myapp-swarm.jar app.json
+
+
+See an example [here](https://github.com/roar109/ignite-server "Ignite Server")
