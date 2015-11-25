@@ -20,9 +20,6 @@ public class JsonAppFileImpl implements AppFile {
 		this.fileName = fileName;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.rage.zeppelin.configuration.reader.AppFile#readFileFromParameter()
-	 */
 	@SuppressWarnings("unchecked")
 	public Map<Object, Object> readFileFromParameter() {
 		ConfigJsonValidator.validateInputJson(fileName);
@@ -33,6 +30,7 @@ public class JsonAppFileImpl implements AppFile {
 		try (Reader f =  new InputStreamReader(new FileInputStream(fileName), ENCODING)){
 			obj = parser.parse(f);
 		} catch (Exception e) {
+			System.err.println(e.getMessage());
 			e.printStackTrace();
 			throw new RuntimeException("Error when try to parse json property file: " + e.getMessage());
 		}

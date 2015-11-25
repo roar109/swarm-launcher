@@ -2,6 +2,7 @@ package org.rage.zeppelin.launcher;
 
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.rage.zeppelin.configuration.ApplicationConfiguration;
+import org.rage.zeppelin.configuration.reader.AppFile;
 import org.rage.zeppelin.configuration.reader.JsonAppFileImpl;
 import org.wildfly.swarm.container.Container;
 import org.wildfly.swarm.jaxrs.JAXRSArchive;
@@ -24,8 +25,10 @@ public class Main {
 		try {
 			final Container container = new Container();
 			container.start();
-			new ApplicationConfiguration(container, ShrinkWrap.create(JAXRSArchive.class), new JsonAppFileImpl(args[0]))
-					.setupContainerAndDeployApp();
+			
+			final JAXRSArchive archive = ShrinkWrap.create(JAXRSArchive.class);
+			final AppFile jsonFile = new JsonAppFileImpl(args[0]);
+			new ApplicationConfiguration(container, archive, jsonFile).setupContainerAndDeployApp();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());

@@ -41,16 +41,18 @@ public class ApplicationConfiguration {
 	 */
 	public void setupContainerAndDeployApp() throws Exception {
 		configureProperties();
+		setupContainerConfiguration();
+		weldContainer.deploy(archive);
+	}
 
+	private void setupContainerConfiguration() throws Exception{
 		if (archive != null) {
 			addPackage();
 			addResources();
 			archive.addAllDependencies();
 		}
-
-		weldContainer.deploy(archive);
 	}
-
+	
 	/**
 	 * Configure available data sources
 	 */
