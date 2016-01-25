@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.rage.zeppelin.configuration.reader.AppFile;
-import org.rage.zeppelin.utils.Constants;
+import static org.rage.zeppelin.utils.Constants.*;
 import org.wildfly.swarm.container.Container;
 import org.wildfly.swarm.jaxrs.JAXRSArchive;
 
@@ -33,6 +33,7 @@ public class ApplicationConfiguration {
 	public void setupContainerAndDeployApp() throws Exception {
 		configureProperties();
 		configureContainer();
+		configureDatasources();
 		weldContainer.deploy(archive);
 	}
 
@@ -48,9 +49,10 @@ public class ApplicationConfiguration {
 	 * Configure available data sources
 	 */
 	public void configureDatasources() {
-		if (existsSectionInConfigurationMap("datasources")) {
-			final JSONObject datasources = (JSONObject) configuration.get("datasources");
+		if (existsSectionInConfigurationMap(DATASOURCE_PROPERTY)) {
+			final JSONObject datasources = (JSONObject) configuration.get(DATASOURCE_PROPERTY);
 			System.out.println(datasources);
+			new DatasourceConfiguration(weldContainer, datasources).setupDatasource();
 		}
 	}
 
@@ -59,9 +61,9 @@ public class ApplicationConfiguration {
 	 */
 	@SuppressWarnings("unchecked")
 	public void configureProperties() {
-		if (existsSectionInConfigurationMap(Constants.SYSTEM_PROPERTIES)) {
+		if (existsSectionInConfigurationMap(SYSTEM_PROPERTIES)) {
 			final Map<Object, Object> systemProperties = (Map<Object, Object>) configuration
-					.get(Constants.SYSTEM_PROPERTIES);
+					.get(SYSTEM_PROPERTIES);
 
 			systemProperties.forEach((key, value) -> {
 				addPropertyAsSystemProperty(toString.apply(key), toString.apply(systemProperties.get(key)));
@@ -77,8 +79,8 @@ public class ApplicationConfiguration {
 	 * Add packages to the archive
 	 */
 	public void addPackage() {
-		if (existsSectionInConfigurationMap(Constants.PACKAGE_PROPERTY)) {
-			archive.addPackages(Boolean.TRUE, toString.apply(configuration.get(Constants.PACKAGE_PROPERTY)));
+		if (existsSectionInConfigurationMap(PACKAGE_PROPERTY)) {
+			archive.addPackages(Boolean.TRUE, toString.apply(configuration.get(PACKAGE_PROPERTY)));
 		}
 	}
 

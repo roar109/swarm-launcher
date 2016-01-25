@@ -55,6 +55,24 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>wildfly-swarm-jpa</artifactId>
+			<version>${wilfy.swarm.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>wildfly-swarm-undertow</artifactId>
+			<version>${wilfy.swarm.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>wildfly-swarm-jsf</artifactId>
+			<version>${wilfy.swarm.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>${json.simple.version}</version>

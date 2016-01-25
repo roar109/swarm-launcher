@@ -9,4 +9,15 @@ public class Constants {
 	public static final String RESOURCE_TARGET_PATH_PROPERTY = "targetPath";
 	public static final String REST_RESOURCES_PROPERTY = "restResources";
 	public static final String REST_RESOURCES_CLASS_PROPERTY = "class";
+	
+	/**Data sources*/
+	public static final String DATASOURCE_PROPERTY = "datasource";
+	public static final String DATASOURCE_DRIVER_PROPERTY = "datasourceDriver";
+	
+	public static final String DATASOURCE_NAME_PROPERTY = "name";
+	public static final String DATASOURCE_DRIVERNAME_PROPERTY = "driverName";
+	public static final String DATASOURCE_CONNURL_PROPERTY = "connectionURL";
+	public static final String DATASOURCE_AUTH_PROPERTY = "authentication";
+	
+	
 }
